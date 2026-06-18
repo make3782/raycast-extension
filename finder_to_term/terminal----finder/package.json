@@ -16,14 +16,14 @@
   "commands": [
     {
       "name": "pathfinder---iterm2",
-      "title": "PathFinder -> Iterm2",
+      "title": "PathFinder -> iTerm2",
       "subtitle": "PathFinder 到 iterm2",
       "description": "将当前PathFinder 路劲打开到 iterm2",
       "mode": "no-view"
     },
     {
       "name": "iterm2---pathfinder",
-      "title": "Iterm2 -> PathFinder",
+      "title": "iTerm2 -> PathFinder",
       "description": "将当前PathFinder 路劲打开到 iterm2",
       "mode": "no-view"
     }
