@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { fetchModels } from "./models";
+import { fetchModels, toProviderGroups } from "./models";
 
 const SAMPLE_RESPONSE = {
   acme: {
@@ -39,5 +39,43 @@ describe("fetchModels", () => {
     vi.stubGlobal("fetch", mockFetch);
 
     await expect(fetchModels()).rejects.toThrow("models.dev request failed: 503");
+  });
+});
+
+describe("toProviderGroups", () => {
+  it("groups by provider, sorts providers and models by name, and attaches provider info to each model", () => {
+    const data = {
+      beta: {
+        id: "beta",
+        name: "Beta Labs",
+        doc: "https://beta.example/docs",
+        models: {
+          "beta-mini": { id: "beta-mini", name: "Beta Mini" },
+        },
+      },
+      acme: {
+        id: "acme",
+        name: "Acme AI",
+        models: {
+          "acme-small": { id: "acme-small", name: "Acme Small" },
+          "acme-large": { id: "acme-large", name: "Acme Large" },
+        },
+      },
+    };
+
+    const groups = toProviderGroups(data);
+
+    expect(groups.map((g) => g.providerId)).toEqual(["acme", "beta"]);
+    expect(groups[0].models.map((m) => m.id)).toEqual(["acme-large", "acme-small"]);
+    expect(groups[0].models[0]).toMatchObject({
+      providerId: "acme",
+      providerName: "Acme AI",
+      providerDoc: undefined,
+    });
+    expect(groups[1].models[0]).toMatchObject({
+      providerId: "beta",
+      providerName: "Beta Labs",
+      providerDoc: "https://beta.example/docs",
+    });
   });
 });

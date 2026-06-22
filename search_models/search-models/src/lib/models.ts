@@ -32,3 +32,36 @@ export async function fetchModels(): Promise<ModelsApiResponse> {
   }
   return (await res.json()) as ModelsApiResponse;
 }
+
+export type ModelWithProvider = Model & {
+  providerId: string;
+  providerName: string;
+  providerDoc?: string;
+};
+
+export type ProviderGroup = {
+  providerId: string;
+  providerName: string;
+  models: ModelWithProvider[];
+};
+
+export function toProviderGroups(data: ModelsApiResponse): ProviderGroup[] {
+  return Object.values(data)
+    .map((provider) => {
+      const models: ModelWithProvider[] = Object.values(provider.models)
+        .map((model) => ({
+          ...model,
+          providerId: provider.id,
+          providerName: provider.name,
+          providerDoc: provider.doc,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      return {
+        providerId: provider.id,
+        providerName: provider.name,
+        models,
+      };
+    })
+    .sort((a, b) => a.providerName.localeCompare(b.providerName));
+}
