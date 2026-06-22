@@ -86,6 +86,28 @@ export default function Command() {
   const resolvedA = resolveModel(selectedA);
   const resolvedB = resolveModel(selectedB);
 
+  // 自动回退：所选模型在数据刷新后不存在，或阶段与模型状态不一致时修正。
+  useEffect(() => {
+    if (phase === "pickB" && selectedA && !resolvedA) {
+      setSelectedA(null);
+      setPhase("pickA");
+      setSearchText("");
+    }
+  }, [phase, selectedA, resolvedA]);
+
+  useEffect(() => {
+    if (phase !== "result") return;
+    if (!resolvedA) {
+      setSelectedA(null);
+      setSelectedB(null);
+      setPhase("pickA");
+      setSearchText("");
+    } else if (!resolvedB) {
+      setPhase("pickB");
+      setSearchText("");
+    }
+  }, [phase, resolvedA, resolvedB]);
+
   // —— 阶段三：结果视图 ——
   if (phase === "result" && resolvedA && resolvedB) {
     return (
@@ -123,12 +145,12 @@ export default function Command() {
       searchBarPlaceholder={placeholder}
       navigationTitle={bannerTitle}
     >
-      {phase === "pickB" && selectedA ? (
+      {phase === "pickB" && (resolvedA ?? selectedA) ? (
         <List.Section title="已选第一个">
           <List.Item
             icon={{ source: Icon.CheckCircle, tintColor: Color.Green }}
-            title={selectedA.name}
-            subtitle={`${selectedA.providerName} · ${selectedA.id}`}
+            title={(resolvedA ?? selectedA)!.name}
+            subtitle={`${(resolvedA ?? selectedA)!.providerName} · ${(resolvedA ?? selectedA)!.id}`}
             accessories={[{ icon: Icon.Shuffle, text: "点击下方选择第二个" }]}
           />
         </List.Section>
