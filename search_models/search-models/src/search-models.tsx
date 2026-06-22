@@ -23,7 +23,11 @@ export default function Command() {
     }
   }, [error, data]);
 
-  const groups = useMemo(() => filterProviders(data ?? [], searchText), [data, searchText]);
+  const isSearchEmpty = searchText.trim().length === 0;
+  const groups = useMemo(
+    () => (isSearchEmpty ? [] : filterProviders(data ?? [], searchText)),
+    [data, searchText, isSearchEmpty],
+  );
 
   if (error && !data) {
     return (
@@ -50,33 +54,43 @@ export default function Command() {
       onSearchTextChange={setSearchText}
       searchBarPlaceholder="搜索供应商或模型名称..."
     >
-      {groups.map((group) => (
-        <List.Section key={group.providerId} title={group.providerName}>
-          {group.models.map((model) => {
-            const priceAccessory = formatPriceAccessory(model.cost);
-            return (
-              <List.Item
-                key={`${group.providerId}/${model.id}`}
-                title={model.name}
-                subtitle={model.id}
-                accessories={priceAccessory ? [{ text: priceAccessory }] : []}
-                detail={<ModelDetail model={model} />}
-                actions={
-                  <ActionPanel>
-                    <Action.CopyToClipboard
-                      title="复制 Provider/Model"
-                      content={buildProviderModelId(group.providerId, model.id)}
-                    />
-                    <Action.CopyToClipboard title="复制 Model ID" content={model.id} />
-                    <Action.CopyToClipboard title="复制 Provider ID" content={group.providerId} />
-                    {model.providerDoc ? <Action.OpenInBrowser title="打开供应商文档" url={model.providerDoc} /> : null}
-                  </ActionPanel>
-                }
-              />
-            );
-          })}
-        </List.Section>
-      ))}
+      {isSearchEmpty ? (
+        <List.EmptyView
+          icon={Icon.MagnifyingGlass}
+          title="输入供应商或模型名称开始搜索"
+          description="例如 anthropic、claude、gpt-4 等"
+        />
+      ) : (
+        groups.map((group) => (
+          <List.Section key={group.providerId} title={group.providerName}>
+            {group.models.map((model) => {
+              const priceAccessory = formatPriceAccessory(model.cost);
+              return (
+                <List.Item
+                  key={`${group.providerId}/${model.id}`}
+                  title={model.name}
+                  subtitle={model.id}
+                  accessories={priceAccessory ? [{ text: priceAccessory }] : []}
+                  detail={<ModelDetail model={model} />}
+                  actions={
+                    <ActionPanel>
+                      <Action.CopyToClipboard
+                        title="复制 Provider/Model"
+                        content={buildProviderModelId(group.providerId, model.id)}
+                      />
+                      <Action.CopyToClipboard title="复制 Model ID" content={model.id} />
+                      <Action.CopyToClipboard title="复制 Provider ID" content={group.providerId} />
+                      {model.providerDoc ? (
+                        <Action.OpenInBrowser title="打开供应商文档" url={model.providerDoc} />
+                      ) : null}
+                    </ActionPanel>
+                  }
+                />
+              );
+            })}
+          </List.Section>
+        ))
+      )}
     </List>
   );
 }
