@@ -69,9 +69,7 @@ export default function Command() {
                     />
                     <Action.CopyToClipboard title="复制 Model ID" content={model.id} />
                     <Action.CopyToClipboard title="复制 Provider ID" content={group.providerId} />
-                    {model.providerDoc ? (
-                      <Action.OpenInBrowser title="打开供应商文档" url={model.providerDoc} />
-                    ) : null}
+                    {model.providerDoc ? <Action.OpenInBrowser title="打开供应商文档" url={model.providerDoc} /> : null}
                   </ActionPanel>
                 }
               />
@@ -112,16 +110,10 @@ function ModelDetail({ model }: { model: ModelWithProvider }) {
             <List.Item.Detail.Metadata.Label title="Output Cost" text={`$${model.cost.output} / 1M tokens`} />
           ) : null}
           {model.cost?.cache_read !== undefined ? (
-            <List.Item.Detail.Metadata.Label
-              title="Cache Read Cost"
-              text={`$${model.cost.cache_read} / 1M tokens`}
-            />
+            <List.Item.Detail.Metadata.Label title="Cache Read Cost" text={`$${model.cost.cache_read} / 1M tokens`} />
           ) : null}
           {model.cost?.cache_write !== undefined ? (
-            <List.Item.Detail.Metadata.Label
-              title="Cache Write Cost"
-              text={`$${model.cost.cache_write} / 1M tokens`}
-            />
+            <List.Item.Detail.Metadata.Label title="Cache Write Cost" text={`$${model.cost.cache_write} / 1M tokens`} />
           ) : null}
           <List.Item.Detail.Metadata.Separator />
           {model.modalities?.input?.length ? (
@@ -146,9 +138,7 @@ function ModelDetail({ model }: { model: ModelWithProvider }) {
           <List.Item.Detail.Metadata.Label title="Temperature" text={model.temperature ? "✅" : "❌"} />
           <List.Item.Detail.Metadata.Label title="Open Weights" text={model.open_weights ? "Yes" : "No"} />
           <List.Item.Detail.Metadata.Separator />
-          {model.knowledge ? (
-            <List.Item.Detail.Metadata.Label title="Knowledge Cutoff" text={model.knowledge} />
-          ) : null}
+          {model.knowledge ? <List.Item.Detail.Metadata.Label title="Knowledge Cutoff" text={model.knowledge} /> : null}
           {model.release_date ? (
             <List.Item.Detail.Metadata.Label title="Release Date" text={model.release_date} />
           ) : null}
