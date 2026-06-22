@@ -24,7 +24,7 @@
     {
       "name": "model-diff",
       "title": "Model Diff",
-      "description": "对比两个模型的价格、上下文等关键参数差异",
+      "description": "模型对比功能，当前开发中，敬请期待",
       "mode": "no-view"
     }
   ],
