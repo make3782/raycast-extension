@@ -19,7 +19,7 @@
       "title": "search_models",
       "subtitle": "search models from modes.dev",
       "description": "搜索模型基本信息",
-      "mode": "no-view"
+      "mode": "view"
     },
     {
       "name": "model-diff",
