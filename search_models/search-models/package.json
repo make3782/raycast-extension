@@ -1,0 +1,51 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "search-models",
+  "title": "search models",
+  "description": "通过models.dev站点搜索模型的信息，个人场景如下：\n1.  配置模型时需要知道供应商/模型名的准确信息；\n2. 了解模型的价格\n3. 查看模型的上下文、多模态支持情况",
+  "icon": "extension-icon.png",
+  "author": "make3782",
+  "platforms": [
+    "macOS",
+    "Windows"
+  ],
+  "categories": [
+    "Developer Tools"
+  ],
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "search-models",
+      "title": "search_models",
+      "subtitle": "search models from modes.dev",
+      "description": "搜索模型基本信息",
+      "mode": "no-view"
+    },
+    {
+      "name": "model-diff",
+      "title": "model_diff",
+      "description": "对比模型",
+      "mode": "no-view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.104.19",
+    "@raycast/utils": "^1.17.0"
+  },
+  "devDependencies": {
+    "@raycast/eslint-config": "^2.0.4",
+    "@types/node": "22.19.17",
+    "@types/react": "19.0.10",
+    "eslint": "^9.22.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  },
+  "scripts": {
+    "build": "ray build",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint",
+    "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
+    "publish": "npx @raycast/api@latest publish"
+  }
+}
