@@ -45,4 +45,27 @@ describe("filterProviders", () => {
   it("returns an empty array when nothing matches", () => {
     expect(filterProviders(GROUPS, "nonexistent")).toEqual([]);
   });
+
+  it("treats space-separated terms as AND conditions: provider term + model term narrows within that provider", () => {
+    const result = filterProviders(GROUPS, "anthropic opus");
+    expect(result).toHaveLength(1);
+    expect(result[0].providerId).toBe("anthropic");
+    expect(result[0].models).toEqual([GROUPS[0].models[0]]);
+  });
+
+  it("treats space-separated terms as AND conditions: two terms both matching the same model name", () => {
+    const result = filterProviders(GROUPS, "claude opus");
+    expect(result).toHaveLength(1);
+    expect(result[0].models).toEqual([GROUPS[0].models[0]]);
+  });
+
+  it("AND semantics: a provider term plus a term matching nothing in that provider yields no results", () => {
+    expect(filterProviders(GROUPS, "anthropic o-series")).toEqual([]);
+  });
+
+  it("collapses extra whitespace between terms and trims the ends", () => {
+    const result = filterProviders(GROUPS, "  anthropic   opus  ");
+    expect(result).toHaveLength(1);
+    expect(result[0].models).toEqual([GROUPS[0].models[0]]);
+  });
 });
