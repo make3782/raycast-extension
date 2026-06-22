@@ -3,7 +3,7 @@ import { Action, ActionPanel, Icon, List, showToast, Toast } from "@raycast/api"
 import { useCachedPromise } from "@raycast/utils";
 import { fetchModels, toProviderGroups, type ModelWithProvider } from "./lib/models";
 import { filterProviders } from "./lib/filter";
-import { buildProviderModelId, formatPriceAccessory } from "./lib/format";
+import { buildProviderLogoUrl, buildProviderModelId, formatPriceAccessory } from "./lib/format";
 import { limitResults } from "./lib/limit";
 
 // Each rendered item carries a full detail-metadata tree; Raycast's extension
@@ -77,7 +77,7 @@ export default function Command() {
               return (
                 <List.Item
                   key={`${group.providerId}/${model.id}`}
-                  icon={Icon.ComputerChip}
+                  icon={{ source: buildProviderLogoUrl(group.providerId), fallback: Icon.ComputerChip }}
                   title={model.name}
                   subtitle={model.id}
                   accessories={priceAccessory ? [{ text: priceAccessory }] : []}

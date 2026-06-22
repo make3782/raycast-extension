@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatPriceAccessory, buildProviderModelId } from "./format";
+import { formatPriceAccessory, buildProviderModelId, buildProviderLogoUrl } from "./format";
 
 describe("formatPriceAccessory", () => {
   it("formats input/output cost as a per-1M-token string", () => {
@@ -20,5 +20,11 @@ describe("formatPriceAccessory", () => {
 describe("buildProviderModelId", () => {
   it("joins provider id and model id with a slash", () => {
     expect(buildProviderModelId("anthropic", "claude-opus-4-5")).toBe("anthropic/claude-opus-4-5");
+  });
+});
+
+describe("buildProviderLogoUrl", () => {
+  it("builds a models.dev logo URL for the provider id", () => {
+    expect(buildProviderLogoUrl("anthropic")).toBe("https://models.dev/logos/anthropic.svg");
   });
 });

@@ -13,3 +13,7 @@ export function formatPriceAccessory(cost?: Model["cost"]): string | undefined {
 export function buildProviderModelId(providerId: string, modelId: string): string {
   return `${providerId}/${modelId}`;
 }
+
+export function buildProviderLogoUrl(providerId: string): string {
+  return `https://models.dev/logos/${providerId}.svg`;
+}
