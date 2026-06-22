@@ -71,12 +71,13 @@ export default function Command() {
         />
       ) : (
         groups.map((group) => (
-          <List.Section key={group.providerId} title={group.providerName}>
+          <List.Section key={group.providerId} title={group.providerName} subtitle={`${group.models.length} 个模型`}>
             {group.models.map((model) => {
               const priceAccessory = formatPriceAccessory(model.cost);
               return (
                 <List.Item
                   key={`${group.providerId}/${model.id}`}
+                  icon={Icon.ComputerChip}
                   title={model.name}
                   subtitle={model.id}
                   accessories={priceAccessory ? [{ text: priceAccessory }] : []}
