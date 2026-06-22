@@ -13,6 +13,7 @@ const MAX_RESULTS = 50;
 
 export default function Command() {
   const [searchText, setSearchText] = useState("");
+  const [isShowingDetail, setIsShowingDetail] = useState(false);
   const { data, isLoading, error, revalidate } = useCachedPromise(
     async () => toProviderGroups(await fetchModels()),
     [],
@@ -57,7 +58,7 @@ export default function Command() {
   return (
     <List
       isLoading={isLoading}
-      isShowingDetail
+      isShowingDetail={isShowingDetail}
       filtering={false}
       onSearchTextChange={setSearchText}
       searchBarPlaceholder="搜索供应商或模型名称..."
@@ -91,6 +92,12 @@ export default function Command() {
                       {model.providerDoc ? (
                         <Action.OpenInBrowser title="打开供应商文档" url={model.providerDoc} />
                       ) : null}
+                      <Action
+                        title={isShowingDetail ? "隐藏详情面板" : "显示详情面板"}
+                        icon={Icon.Sidebar}
+                        shortcut={{ modifiers: ["cmd"], key: "d" }}
+                        onAction={() => setIsShowingDetail((value) => !value)}
+                      />
                     </ActionPanel>
                   }
                 />
