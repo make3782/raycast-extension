@@ -4,6 +4,12 @@ import { useCachedPromise } from "@raycast/utils";
 import { fetchModels, toProviderGroups, type ModelWithProvider } from "./lib/models";
 import { filterProviders } from "./lib/filter";
 import { buildProviderModelId, formatPriceAccessory } from "./lib/format";
+import { limitResults } from "./lib/limit";
+
+// Each rendered item carries a full detail-metadata tree; Raycast's extension
+// worker has a fixed memory budget, and a broad query (even a single letter)
+// can still match thousands of models, so unfiltered results are capped here.
+const MAX_RESULTS = 50;
 
 export default function Command() {
   const [searchText, setSearchText] = useState("");
@@ -24,10 +30,12 @@ export default function Command() {
   }, [error, data]);
 
   const isSearchEmpty = searchText.trim().length === 0;
-  const groups = useMemo(
-    () => (isSearchEmpty ? [] : filterProviders(data ?? [], searchText)),
-    [data, searchText, isSearchEmpty],
-  );
+  const { groups, truncated, shownCount, totalCount } = useMemo(() => {
+    if (isSearchEmpty) {
+      return { groups: [], truncated: false, shownCount: 0, totalCount: 0 };
+    }
+    return limitResults(filterProviders(data ?? [], searchText), MAX_RESULTS);
+  }, [data, searchText, isSearchEmpty]);
 
   if (error && !data) {
     return (
@@ -91,6 +99,13 @@ export default function Command() {
           </List.Section>
         ))
       )}
+      {truncated ? (
+        <List.Item
+          title={`还有 ${totalCount - shownCount} 个结果未显示`}
+          subtitle="请输入更精确的关键词缩小范围"
+          icon={Icon.Ellipsis}
+        />
+      ) : null}
     </List>
   );
 }
