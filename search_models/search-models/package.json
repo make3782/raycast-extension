@@ -24,8 +24,8 @@
     {
       "name": "model-diff",
       "title": "Model Diff",
-      "description": "模型对比功能，当前开发中，敬请期待",
-      "mode": "no-view"
+      "description": "对比两个模型的上下文、价格、能力等关键指标，一键复制 Markdown 对比表",
+      "mode": "view"
     }
   ],
   "dependencies": {
